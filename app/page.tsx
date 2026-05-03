@@ -59,9 +59,9 @@ export default function Home() {
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Link href="/verify" style={{ fontSize: 13, fontWeight: 600, color: 'var(--chakra)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, border: '1.5px solid #BFDBFE', background: '#EFF6FF' }}>
+            {/* <Link href="/verify" style={{ fontSize: 13, fontWeight: 600, color: 'var(--chakra)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, border: '1.5px solid #BFDBFE', background: '#EFF6FF' }}>
               🔍 {hi ? 'अधिकारी सत्यापन' : 'Officer Verify'}
-            </Link>
+            </Link> */}
             <button onClick={() => setLang(hi ? 'en' : 'hi')}
               style={{ fontSize: 12, fontWeight: 600, padding: '6px 14px', borderRadius: 20, border: '1.5px solid var(--saffron-bd)', background: 'var(--saffron-bg)', color: 'var(--saffron)', cursor: 'pointer' }}>
               {hi ? 'English' : 'हिंदी'}
