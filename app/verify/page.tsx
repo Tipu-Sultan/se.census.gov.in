@@ -174,16 +174,7 @@ export default function VerifyPage() {
             </div>
           )}
 
-          {/* Format hint */}
-          <div style={{ marginTop: 12, padding: '10px 12px', background: 'var(--s2)', borderRadius: 8, display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-            <span style={{ fontSize: 11, color: 'var(--t4)', marginRight: 4 }}>Format:</span>
-            {['UP', '2027', 'P1', 'X4K9M2'].map((part, i) => (
-              <span key={i} style={{ fontFamily: 'Courier New, monospace', fontSize: 12, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: i === 0 ? 'var(--saffron-bg)' : i === 3 ? '#EFF6FF' : 'var(--s3)', color: i === 0 ? 'var(--saffron)' : i === 3 ? 'var(--chakra)' : 'var(--t3)', border: `1px solid ${i === 0 ? 'var(--saffron-bd)' : i === 3 ? '#BFDBFE' : 'var(--bd)'}` }}>
-                {part}
-              </span>
-            ))}
-            <span style={{ fontSize: 11, color: 'var(--t4)' }}>→ State · Year · Phase · Unique ID</span>
-          </div>
+          
         </div>
 
         {/* Error */}
@@ -258,23 +249,6 @@ export default function VerifyPage() {
           </div>
         )}
 
-        {/* Example IDs to help officers */}
-        {!result && !error && (
-          <div className="card afup" style={{ padding: '16px 18px' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--t4)', letterSpacing: '.04em', textTransform: 'uppercase', marginBottom: 10 }}>ID Format Examples</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {['UP-2027-P1-X4K9M2', 'MH-2027-P1-B7RQ4N', 'DL-2027-P1-ZK3LP8', 'TN-2027-P1-QR8WV5'].map(id => (
-                <button key={id} onClick={() => { setInputId(id); setError(''); setFormatErr(''); }}
-                  style={{ fontFamily: 'Courier New, monospace', fontSize: 12, fontWeight: 600, padding: '5px 11px', borderRadius: 6, border: '1px solid var(--bd)', background: 'var(--s2)', color: 'var(--t3)', cursor: 'pointer', letterSpacing: '.06em', transition: 'all .15s' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--saffron-bd)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--bd)')}>
-                  {id}
-                </button>
-              ))}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--t4)', marginTop: 8 }}>Click an example to auto-fill (test format only)</div>
-          </div>
-        )}
       </div>
     </div>
   );
