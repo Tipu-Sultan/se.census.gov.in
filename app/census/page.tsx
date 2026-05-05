@@ -10,6 +10,7 @@ import {
   formatPhone, formatAadhaar, validateAadhaar,
   type ValidationResult
 } from '@/lib/validators';
+import Link from 'next/link';
 
 // ── Session ──
 function getSessionToken(): string {
@@ -688,7 +689,9 @@ export default function CensusForm() {
       </header>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '20px 16px 60px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: 20 }}>
-
+        <div style={{ display: 'flex', gap: 8 }}>
+            <Link href="/" className="btn btn-ghost" style={{ fontSize: 12, padding: '7px 14px' }}>← Back</Link>
+          </div>
         {/* Sidebar */}
         <aside style={{ display: 'none' }} className="sidebar-hide">
           <div className="card" style={{ padding: '12px 10px', position: 'sticky', top: 80 }}>

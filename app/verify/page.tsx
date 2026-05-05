@@ -62,7 +62,7 @@ export default function VerifyPage() {
   setResult(null);
   setError('');
   setFormatErr('');
-  }
+}
 
   async function handleVerify() {
     const id = inputId.trim().toUpperCase();
@@ -185,7 +185,6 @@ export default function VerifyPage() {
             </div>
           )}
 
-          
         </div>
 
         {/* Error */}
@@ -200,65 +199,144 @@ export default function VerifyPage() {
           </div>
         )}
 
-        {/* Success result */}
-        {result && (
-          <div className="card2 asc" style={{ overflow: 'hidden' }}>
-            {/* Green header */}
-            <div style={{ background: 'linear-gradient(135deg, #0F9A0F, var(--green))', padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>✅</div>
-              <div style={{ color: 'white', flex: 1 }}>
-                <div style={{ fontWeight: 800, fontSize: 16 }}>Verified — Self-Enumeration Confirmed</div>
-                <div className="dv" style={{ fontSize: 12, opacity: 0.85, marginTop: 2 }}>स्व-गणना सत्यापित हुई</div>
+        {/* Result card */}
+        {result && (() => {
+          const isSubmitted = result.status === 'submitted';
+          const isDraft     = result.status === 'draft';
+
+          // Colour tokens based on status
+          const headerBg   = isSubmitted
+            ? 'linear-gradient(135deg, #0F9A0F, var(--green))'
+            : isDraft
+              ? 'linear-gradient(135deg, #B45309, #92400E)'   // amber/orange for draft
+              : 'linear-gradient(135deg, #DC2626, #991B1B)';  // red for unknown/invalid
+
+          const statusIcon        = isSubmitted ? '✅' : isDraft ? '⏳' : '❌';
+          const statusHeading     = isSubmitted
+            ? 'Verified — Self-Enumeration Confirmed'
+            : isDraft
+              ? 'Incomplete — Draft Not Yet Submitted'
+              : 'Unknown Status';
+          const statusSubHeading  = isSubmitted
+            ? 'स्व-गणना सत्यापित हुई'
+            : isDraft
+              ? 'अधूरा — फॉर्म अभी जमा नहीं हुआ'
+              : 'अज्ञात स्थिति';
+
+          const statusBadgeBg = isSubmitted ? '#16A34A' : isDraft ? '#D97706' : '#DC2626';
+
+          const statusCellColor = isSubmitted
+            ? 'var(--green)'
+            : isDraft
+              ? '#B45309'
+              : '#DC2626';
+
+          // Officer note content changes by status
+          const noteIcon    = isSubmitted ? '📋' : isDraft ? '⚠️' : '🚫';
+          const noteBg      = isSubmitted ? 'var(--saffron-bg)'  : isDraft ? '#FFFBEB' : '#FEF2F2';
+          const noteBorder  = isSubmitted ? 'var(--saffron-bd)'  : isDraft ? '#FCD34D' : '#FECACA';
+          const noteTitleColor = isSubmitted ? 'var(--saffron)' : isDraft ? '#B45309' : '#DC2626';
+          const noteTitle   = isSubmitted ? 'Officer Note' : isDraft ? 'Action Required' : 'Alert';
+          const noteBody    = isSubmitted
+            ? <>Cross-check the <strong>Head&apos;s name</strong>, <strong>House No.</strong>, and <strong>Village</strong> with your physical records. Mark as verified in your enumeration register.</>
+            : isDraft
+              ? <>This household has started but <strong>not yet submitted</strong> their census form. Please ask the head of household to complete and submit the form, or assist them in doing so.</>
+              : <>This record has an unrecognised status. Please contact your supervisor or the census helpdesk.</>;
+          const noteHi = isSubmitted
+            ? 'परिवार मुखिया का नाम, घर नंबर और गाँव अपने रजिस्टर से मिलाएं।'
+            : isDraft
+              ? 'परिवार ने फॉर्म शुरू किया है लेकिन अभी जमा नहीं किया। उन्हें फॉर्म पूरा करने में सहायता करें।'
+              : 'अज्ञात स्थिति — अपने पर्यवेक्षक से संपर्क करें।';
+
+          return (
+            <div className="card2 asc" style={{ overflow: 'hidden', marginBottom: 16 }}>
+
+              {/* ── Status header ── */}
+              <div style={{ background: headerBg, padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+                  {statusIcon}
+                </div>
+                <div style={{ color: 'white', flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.3 }}>{statusHeading}</div>
+                  <div className="dv" style={{ fontSize: 12, opacity: 0.82, marginTop: 3 }}>{statusSubHeading}</div>
+                </div>
+                {/* Status pill */}
+                <div style={{
+                  flexShrink: 0,
+                  padding: '4px 10px', borderRadius: 20,
+                  background: statusBadgeBg,
+                  border: '1.5px solid rgba(255,255,255,0.35)',
+                  fontSize: 11, fontWeight: 800, letterSpacing: '.06em',
+                  color: 'white',
+                }}>
+                  {result.status.toUpperCase()}
+                </div>
               </div>
-              <div className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', fontSize: 11 }}>
-                SUBMITTED
+
+              {/* ── Submission ID strip ── */}
+              <div style={{ padding: '14px 22px', background: 'var(--s2)', borderBottom: '1px solid var(--bd)', textAlign: 'center' }}>
+                <div style={{ fontSize: 10, color: 'var(--t4)', fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 7 }}>
+                  Submission ID / पहचान संख्या
+                </div>
+                <div className="id-badge">{result.submissionId}</div>
               </div>
-            </div>
 
-            {/* Submission ID highlight */}
-            <div style={{ padding: '16px 22px', background: 'var(--s2)', borderBottom: '1px solid var(--bd)', textAlign: 'center' }}>
-              <div style={{ fontSize: 11, color: 'var(--t4)', fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase', marginBottom: 6 }}>Submission ID</div>
-              <div className="id-badge">{result.submissionId}</div>
-            </div>
+              {/* ── Details table ── */}
+              <div style={{ padding: '4px 22px 22px' }}>
+                <table className="vtable" style={{ marginTop: 14 }}>
+                  <tbody>
+                    {FIELDS.map(f => {
+                      let val = String(result[f.key] ?? '—');
+                      if (f.key === 'submittedAt' && val !== '—') {
+                        try { val = new Date(val).toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' }); } catch { /* */ }
+                      }
+                      const isStatusRow = f.key === 'status';
+                      const isIdRow     = f.key === 'submissionId';
+                      const isNameRow   = f.key === 'headName';
+                      return (
+                        <tr key={f.key}>
+                          <td>
+                            <span>{f.label}</span>
+                            <span className="dv" style={{ display: 'block', fontSize: 10, color: 'var(--t4)', lineHeight: 1.1, marginTop: 1 }}>{f.hi}</span>
+                          </td>
+                          <td style={{
+                            color     : isStatusRow ? statusCellColor : isIdRow ? 'var(--chakra)' : 'var(--t1)',
+                            fontWeight: isStatusRow || isNameRow || isIdRow ? 700 : 500,
+                            fontFamily: isIdRow ? 'Courier New, monospace' : 'inherit',
+                          }}>
+                            {/* Status row gets a coloured pill */}
+                            {isStatusRow ? (
+                              <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 5,
+                                padding: '3px 10px', borderRadius: 12,
+                                fontSize: 11, fontWeight: 700, letterSpacing: '.05em',
+                                background: isSubmitted ? 'var(--green-bg)' : isDraft ? '#FFFBEB' : '#FEF2F2',
+                                color: statusCellColor,
+                                border: `1px solid ${isSubmitted ? 'var(--green-bd)' : isDraft ? '#FCD34D' : '#FECACA'}`,
+                              }}>
+                                {statusIcon} {val.toUpperCase()}
+                              </span>
+                            ) : (val || '—')}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
-            {/* Details table */}
-            <div style={{ padding: '0 22px 22px' }}>
-              <table className="vtable" style={{ marginTop: 16 }}>
-                <tbody>
-                  {FIELDS.map(f => {
-                    let val = String(result[f.key] ?? '—');
-                    if (f.key === 'submittedAt' && val !== '—') {
-                      try { val = new Date(val).toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' }); } catch { /* */ }
-                    }
-                    if (f.key === 'status') val = val.toUpperCase();
-                    return (
-                      <tr key={f.key}>
-                        <td>
-                          <span>{f.label}</span>
-                          <span className="dv" style={{ display: 'block', fontSize: 10, color: 'var(--t4)', lineHeight: 1 }}>{f.hi}</span>
-                        </td>
-                        <td style={{ color: f.key === 'status' ? 'var(--green)' : f.key === 'submissionId' ? 'var(--chakra)' : 'var(--t1)', fontWeight: f.key === 'headName' || f.key === 'submissionId' ? 700 : 500, fontFamily: f.key === 'submissionId' ? 'Courier New, monospace' : 'inherit' }}>
-                          {val || '—'}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+              {/* ── Officer note — colour matches status ── */}
+              <div style={{ margin: '0 22px 22px', padding: '12px 14px', background: noteBg, border: `1px solid ${noteBorder}`, borderRadius: 10 }}>
+                <div style={{ fontWeight: 700, fontSize: 12, color: noteTitleColor, marginBottom: 5 }}>
+                  {noteIcon} {noteTitle}
+                </div>
+                <p style={{ fontSize: 12, color: 'var(--t2)', lineHeight: 1.65 }}>{noteBody}</p>
+                <p className="dv" style={{ fontSize: 11.5, color: 'var(--t3)', marginTop: 5 }}>{noteHi}</p>
+              </div>
 
-            {/* Officer action note */}
-            <div style={{ margin: '0 22px 22px', padding: '12px 14px', background: 'var(--saffron-bg)', border: '1px solid var(--saffron-bd)', borderRadius: 10 }}>
-              <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--saffron)', marginBottom: 5 }}>📋 Officer Note</div>
-              <p style={{ fontSize: 12, color: 'var(--t2)', lineHeight: 1.6 }}>
-                This household has completed digital self-enumeration. Cross-check the <strong>Head&apos;s name</strong>, <strong>House No.</strong>, and <strong>Village</strong> with your physical records. Mark as verified in your enumeration register.
-              </p>
-              <p className="dv" style={{ fontSize: 11.5, color: 'var(--t3)', marginTop: 4 }}>
-                परिवार मुखिया का नाम, घर नंबर और गाँव अपने रजिस्टर से मिलाएं।
-              </p>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
       </div>
     </div>
