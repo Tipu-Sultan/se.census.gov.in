@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const doc = await CensusSubmission.findOne(
-      { submissionId: id, status: 'submitted' },
+      { submissionId: id },
       // Return only safe fields — no session token, no aadhaar
       {
         submissionId: 1, state: 1, district: 1, subDistrict: 1, village: 1,

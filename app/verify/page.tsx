@@ -36,21 +36,32 @@ export default function VerifyPage() {
   const [formatErr, setFormatErr] = useState('');
 
   function handleInput(val: string) {
-    // Auto-format as user types: UP2027P1X4K9M2 → UP-2027-P1-X4K9M2
-    let v = val.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
-    // Auto-insert dashes if user types raw chars
-    if (!v.includes('-') && v.length >= 2) {
-      const raw = v.replace(/-/g, '');
-      if (raw.length <= 2) v = raw;
-      else if (raw.length <= 6) v = raw.slice(0, 2) + '-' + raw.slice(2);
-      else if (raw.length <= 8) v = raw.slice(0, 2) + '-' + raw.slice(2, 6) + '-' + raw.slice(6);
-      else v = raw.slice(0, 2) + '-' + raw.slice(2, 6) + '-' + raw.slice(6, 8) + '-' + raw.slice(8, 14);
-    }
-    setInputId(v);
-    setResult(null);
-    setError('');
-    if (v.length > 0 && v.length < 15) setFormatErr('');
-    else setFormatErr('');
+  // साफ input (only A-Z and 0-9)
+  let raw = val.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+  let v = '';
+
+  if (raw.length <= 2) {
+    v = raw;
+  } else if (raw.length <= 6) {
+    v = raw.slice(0, 2) + '-' + raw.slice(2);
+  } else if (raw.length <= 8) {
+    v = raw.slice(0, 2) + '-' + raw.slice(2, 6) + '-' + raw.slice(6);
+  } else {
+    v =
+      raw.slice(0, 2) +
+      '-' +
+      raw.slice(2, 6) +
+      '-' +
+      raw.slice(6, 8) +
+      '-' +
+      raw.slice(8, 14);
+  }
+
+  setInputId(v);
+  setResult(null);
+  setError('');
+  setFormatErr('');
   }
 
   async function handleVerify() {
